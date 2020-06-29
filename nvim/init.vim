@@ -1,8 +1,9 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call plug#begin('~/.vim-plugged')
+call plug#begin('~/.config/nvim/plugged')
 
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+let g:fzf_tags_command= 'ag -g "" | ctags -R --links=no -L -'
 nnoremap ,p :Files<CR>
 nnoremap ,t :Tags<CR>
 nnoremap ,b :Buffers<CR>
@@ -10,6 +11,7 @@ nnoremap ,l :BTags<CR>
 nnoremap ,w :call fzf#vim#tags(expand('<cword>'))<CR>
 
 Plug 'ludovicchabant/vim-gutentags'
+let g:gutentags_file_list_command = 'ag -g ""'
 
 Plug 'jlanzarotta/bufexplorer'
 "map <silent> <F3> :call BufExplorerHorizontalSplit()<CR>
@@ -20,7 +22,7 @@ let g:bufExplorerSplitBelow = 1
 let g:bufExplorerShowRelativePath = 0
 let g:bufExplorerSplitOutPathName = 1
 
-Plug 'terryma/vim-multiple-cursors'
+Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
 Plug 'Lokaltog/vim-easymotion'
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
@@ -35,41 +37,56 @@ vmap ,, <Plug>(easymotion-s)
 " Need one more keystroke, but on average, it may be more comfortable.
 nmap s <Plug>(easymotion-s2)
 
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-"let g:go_bin_path = "/Users/pachanga/dev/gobin/bin"
-
-Plug 'rking/ag.vim'
-
-"Plug 'vim-scripts/AutoComplPop'
-
-Plug 'w0rp/ale'
-" Write this in your vimrc file
-let g:ale_lint_on_text_changed = 'never'
-" You can disable this option too
-" if you don't want linters to run on opening a file
-let g:ale_lint_on_enter = 0
-
-"Plug 'ludovicchabant/vim-lawrencium'
+Plug 'fatih/vim-go'
+let g:go_fmt_command = "goimports"
+nmap ,gr :GoReferrers<CR>
 
 Plug 'leafoftree/vim-vue-plugin'
 
 Plug 'OmniSharp/omnisharp-vim'
+"let g:OmniSharp_highlighting = 2
 let g:OmniSharp_server_stdio = 1
-let g:OmniSharp_highlighting = 2
-"let g:OmniSharp_proc_debug = 1
-let g:OmniSharp_loglevel = 'debug'
+let g:OmniSharp_timeout = 5
 let g:OmniSharp_server_use_mono = 1
-"let g:OmniSharp_selector_ui = 'fzf'
+let g:OmniSharp_popup_position = 'peek'
+let g:OmniSharp_selector_ui = 'fzf'
+nmap ,cu :OmniSharpFindUsages<CR>
+nmap ,cd :OmniSharpGotoDefinition<CR>
+nmap ,ci :OmniSharpFindImplementations<CR>
+nmap ,cp :OmniSharpPreviewDefinition<CR>
+augroup omnisharp_commands
+    autocmd!
+    autocmd FileType cs nnoremap <buffer> <C-]> :OmniSharpGotoDefinition<CR>
+augroup END
 
+set previewheight=5
+
+Plug 'w0rp/ale'
 let g:ale_linters = { 'cs': ['OmniSharp'] }
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_lint_on_text_changed = 0
+let g:ale_lint_on_enter = 0
+let g:ale_lint_on_save = 1
+let g:ale_lint_delay = 400
+nmap <silent> <C-e> <Plug>(ale_next_wrap)
 
-Plug 'prabirshrestha/asyncomplete.vim'
-inoremap <expr> <Tab>   pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr>    pumvisible() ? "\<C-y>" : "\<cr>"
+Plug 'rking/ag.vim'
 
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+let g:deoplete#enable_at_startup = 1
 set completeopt=longest,menuone
-"set completepopup=highlight:Pmenu,border:off
+function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+inoremap <silent><expr> <TAB>
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ "\<C-x><C-o>"
+
+Plug 'sjl/vitality.vim'
+let g:vitality_always_assume_iterm = 1
+au FocusLost * :up
+
 
 call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -92,15 +109,15 @@ set expandtab           " Insert spaces when TAB is pressed.
 set tabstop=2           " Render TABs using this many spaces.
 set shiftwidth=2        " Indentation amount for < and > commands.
 set wildmenu
-"set wildmode=longest,list
-set wildmode=longest:full
+set wildmode=longest,list
+"set wildmode=longest:full
 set encoding=utf-8
 set nobackup
 set noswapfile
 set title
 set hidden
 set nohlsearch
-set laststatus=2
+"set laststatus=1
 set lazyredraw
 set autoindent
 set smartindent
@@ -108,7 +125,6 @@ set noerrorbells        " No beeps.
 set modeline            " Enable modeline.
 set linespace=0         " Set line-spacing to minimum.
 set nojoinspaces        " Prevents inserting two spaces after punctuation on a join (J)
-set backspace=indent,eol,start
 
 " More natural splits
 set splitbelow          " Horizontal split below current.
@@ -150,6 +166,18 @@ vnoremap > >gv
 map j gj
 map k gk
 
+function! ZoomCurrent()
+  execute "tabnew +" . line('.') . " %"
+endfunction
+
+function! ZoomClose()
+  tabclose
+endfunction
+
+" "Zoom" a split window into a tab and/or close it
+com! ZZ call ZoomCurrent()
+com! ZC call ZoomClose()
+
 "w!! would allow to use sudo for writing into a privileged file
 cmap w!! w !sudo tee % >/dev/null
 
@@ -164,12 +192,14 @@ com! -nargs=1 Qfdofile try | sil cfirst |
   \ endtry
 
 " some hotkeys for quickfix window
-"nmap <leader>n :cn<CR><Esc>h 
-"nmap <leader>N :cp<CR><Esc>h 
 nmap ,n :cn<CR><Esc>h 
 nmap ,N :cp<CR><Esc>h 
 
 com! ClQFix call setqflist([])
+
+" save on escape
+noremap <Esc> <Esc>:up<CR>
+autocmd InsertLeave * if expand('%') != '' | update | endif
 
 " change dir to current file directory
 au BufEnter * silent! lcd %:p:h
@@ -177,17 +207,3 @@ au BufRead,BufNewFile *.bhl set filetype=c
 " Go back to the position the cursor was on the last time this file was edited
 au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")|execute("normal `\"")|endif
 
-" Zoom / Restore window.
-function! s:ZoomToggle() abort
-    if exists('t:zoomed') && t:zoomed
-        execute t:zoom_winrestcmd
-        let t:zoomed = 0
-    else
-        let t:zoom_winrestcmd = winrestcmd()
-        resize
-        vertical resize
-        let t:zoomed = 1
-    endif
-endfunction
-command! ZoomToggle call s:ZoomToggle()
-nnoremap <silent> <F4> :ZoomToggle<CR>
