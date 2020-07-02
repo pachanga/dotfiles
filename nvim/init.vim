@@ -39,12 +39,14 @@ nmap s <Plug>(easymotion-s2)
 
 Plug 'fatih/vim-go'
 let g:go_fmt_command = "goimports"
+let g:go_fmt_fail_silently = 1
+let g:go_list_height = 10
+let g:go_list_type = "quickfix"
 nmap ,gr :GoReferrers<CR>
 
 Plug 'leafoftree/vim-vue-plugin'
 
 Plug 'OmniSharp/omnisharp-vim'
-"let g:OmniSharp_highlighting = 2
 let g:OmniSharp_server_stdio = 1
 let g:OmniSharp_timeout = 5
 let g:OmniSharp_server_use_mono = 1
@@ -62,12 +64,17 @@ augroup END
 set previewheight=5
 
 Plug 'w0rp/ale'
-let g:ale_linters = { 'cs': ['OmniSharp'] }
+let g:ale_linters = { 'cs': ['OmniSharp'], 'go' : ['gofmt', 'go vet', 'gopls']}
+"NOTE: golint is too verbose
+"let g:ale_linters = { 'cs': ['OmniSharp'], 'go' : ['gofmt', 'golint', 'go vet', 'gopls']}
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_lint_on_text_changed = 0
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_save = 1
 let g:ale_lint_delay = 400
+let g:ale_go_go_executable = 'go'
+let g:ale_go_golint_executable = '/Users/pachanga/go/bin/golint'
+let g:ale_go_gopls_executable = '/Users/pachanga/go/bin/gopls'
 nmap <silent> <C-e> <Plug>(ale_next_wrap)
 
 Plug 'rking/ag.vim'
@@ -87,6 +94,15 @@ Plug 'sjl/vitality.vim'
 let g:vitality_always_assume_iterm = 1
 au FocusLost * :up
 
+Plug 'ronakg/quickr-preview.vim'
+let g:quickr_preview_keymaps = 0
+let g:quickr_preview_on_cursor = 0
+let g:quickr_preview_position = 'below'
+let g:quickr_preview_size = '9'
+autocmd FileType qf nmap <space> <plug>(quickr_preview)
+
+Plug 'vim-airline/vim-airline'
+let g:airline_section_c = '%F'
 
 call plug#end()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -144,14 +160,15 @@ set nostartofline       " Do not jump to first character with page commands.
 " Explicit paste support
 set pastetoggle=<F5>
 
-" path
-set statusline+=%F
-" flags
-set statusline+=%m%r%h%w
-" encoding
-set statusline+=\ [%{strlen(&fenc)?&fenc:&enc}]
-" line x of y
-set statusline+=\ [line\ %l\/%L]
+"NOTE: handled by airline
+"" path
+"set statusline+=%F
+"" flags
+"set statusline+=%m%r%h%w
+"" encoding
+"set statusline+=\ [%{strlen(&fenc)?&fenc:&enc}]
+"" line x of y
+"set statusline+=\ [line\ %l\/%L]
 
 " auto-resize windows
 autocmd VimResized * wincmd =
@@ -175,8 +192,8 @@ function! ZoomClose()
 endfunction
 
 " "Zoom" a split window into a tab and/or close it
-com! ZZ call ZoomCurrent()
-com! ZC call ZoomClose()
+com! ON call ZoomCurrent()
+com! OF call ZoomClose()
 
 "w!! would allow to use sudo for writing into a privileged file
 cmap w!! w !sudo tee % >/dev/null
@@ -198,8 +215,8 @@ nmap ,N :cp<CR><Esc>h
 com! ClQFix call setqflist([])
 
 " save on escape
-noremap <Esc> <Esc>:up<CR>
-autocmd InsertLeave * if expand('%') != '' | update | endif
+noremap <Esc><Esc> <Esc>:w<CR>
+"autocmd InsertLeave * if expand('%') != '' | update | endif
 
 " change dir to current file directory
 au BufEnter * silent! lcd %:p:h
