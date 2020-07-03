@@ -101,6 +101,12 @@ let g:quickr_preview_position = 'below'
 let g:quickr_preview_size = '9'
 autocmd FileType qf nmap <space> <plug>(quickr_preview)
 
+" Position the (global) quickfix window at the very bottom of the window
+" (useful for making sure that it appears underneath splits)
+" NOTE: Using a check here to make sure that window-specific location-lists
+" aren't effected, as they use the same `FileType` as quickfix-lists.
+autocmd FileType qf if (getwininfo(win_getid())[0].loclist != 1) | wincmd J | endif
+
 Plug 'vim-airline/vim-airline'
 let g:airline_section_c = '%F'
 
