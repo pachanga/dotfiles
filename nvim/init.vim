@@ -94,13 +94,6 @@ Plug 'sjl/vitality.vim'
 let g:vitality_always_assume_iterm = 1
 au FocusLost * :up
 
-Plug 'ronakg/quickr-preview.vim'
-let g:quickr_preview_keymaps = 0
-let g:quickr_preview_on_cursor = 0
-let g:quickr_preview_position = 'below'
-let g:quickr_preview_size = '9'
-autocmd FileType qf nmap <space> <plug>(quickr_preview)
-
 " Position the (global) quickfix window at the very bottom of the window
 " (useful for making sure that it appears underneath splits)
 " NOTE: Using a check here to make sure that window-specific location-lists
