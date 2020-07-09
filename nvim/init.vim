@@ -1,14 +1,17 @@
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin('~/.config/nvim/plugged')
 
+let mapleader=","
+
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
+
 let g:fzf_tags_command= 'ag -g "" | ctags -R --links=no -L -'
-nnoremap ,p :Files<CR>
-nnoremap ,t :Tags<CR>
-nnoremap ,b :Buffers<CR>
-nnoremap ,l :BTags<CR>
-nnoremap ,w :call fzf#vim#tags(expand('<cword>'))<CR>
+nnoremap <leader>p :Files<CR>
+nnoremap <leader>t :Tags<CR>
+nnoremap <leader>b :Buffers<CR>
+nnoremap <leader>l :BTags<CR>
+nnoremap <leader>w :call fzf#vim#tags(expand('<cword>'))<CR>
 
 Plug 'ludovicchabant/vim-gutentags'
 let g:gutentags_file_list_command = 'ag -g ""'
@@ -30,9 +33,9 @@ let g:EasyMotion_smartcase = 1 " Turn on case sensitive feature
 " Bi-directional find motion
 " Jump to anywhere you want with minimal keystrokes, with just one key binding.
 " `s{char}{label}`
-nmap ,, <Plug>(easymotion-s)
-omap ,, <Plug>(easymotion-s)
-vmap ,, <Plug>(easymotion-s)
+nmap <leader>, <Plug>(easymotion-s)
+omap <leader>, <Plug>(easymotion-s)
+vmap <leader>, <Plug>(easymotion-s)
 " `s{char}{char}{label}`
 " Need one more keystroke, but on average, it may be more comfortable.
 nmap s <Plug>(easymotion-s2)
@@ -42,7 +45,7 @@ let g:go_fmt_command = "goimports"
 let g:go_fmt_fail_silently = 1
 let g:go_list_height = 10
 let g:go_list_type = "quickfix"
-nmap ,gr :GoReferrers<CR>
+nmap <leader>gr :GoReferrers<CR>
 
 Plug 'leafoftree/vim-vue-plugin'
 
@@ -52,10 +55,10 @@ let g:OmniSharp_timeout = 5
 let g:OmniSharp_server_use_mono = 1
 let g:OmniSharp_popup_position = 'peek'
 let g:OmniSharp_selector_ui = 'fzf'
-nmap ,cu :OmniSharpFindUsages<CR>
-nmap ,cd :OmniSharpGotoDefinition<CR>
-nmap ,ci :OmniSharpFindImplementations<CR>
-nmap ,cp :OmniSharpPreviewDefinition<CR>
+nmap <leader>cu :OmniSharpFindUsages<CR>
+nmap <leader>cd :OmniSharpGotoDefinition<CR>
+nmap <leader>ci :OmniSharpFindImplementations<CR>
+nmap <leader>cp :OmniSharpPreviewDefinition<CR>
 augroup omnisharp_commands
     autocmd!
     autocmd FileType cs nnoremap <buffer> <C-]> :OmniSharpGotoDefinition<CR>
