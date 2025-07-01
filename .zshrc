@@ -40,20 +40,12 @@ export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"
 
 alias ibrew='arch -x86_64 /usr/local/bin/brew'
 
-export PATH="/Users/ps/platform-tools:/opt/homebrew/bin:/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 
-# bun completions
-[ -s "/Users/ps/.bun/_bun" ] && source "/Users/ps/.bun/_bun"
+#vim mode, a bit buggy?
+#source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
+#source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
-eval "$(direnv hook $SHELL)"
-
-autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /opt/homebrew/bin/nomad nomad
-
-# Added by Windsurf
-export PATH="/Users/ps/.codeium/windsurf/bin:$PATH"
-export PATH="/opt/homebrew/opt/php@8.3/bin:$PATH"
+#shows some random warnings
+#source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
