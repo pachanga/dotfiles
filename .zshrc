@@ -46,6 +46,12 @@ export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
 #source $(brew --prefix)/opt/zsh-vi-mode/share/zsh-vi-mode/zsh-vi-mode.plugin.zsh
 #source /opt/homebrew/share/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+eval "$(direnv hook $SHELL)"
 
 #shows some random warnings
 #source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /opt/homebrew/bin/nomad nomad
+
+# Added by Windsurf
+#export PATH="/Users/ps/.codeium/windsurf/bin:$PATH"
