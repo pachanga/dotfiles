@@ -43,7 +43,7 @@ export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"
 
 alias ibrew='arch -x86_64 /usr/local/bin/brew'
 
-export PATH="/opt/homebrew/opt/openjdk/bin:$PATH"
+export PATH="/opt/homebrew/opt/openjdk/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
 complete -o nospace -C /opt/homebrew/bin/nomad nomad
 
