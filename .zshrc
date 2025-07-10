@@ -39,11 +39,9 @@ autoload -U +X bashcompinit && bashcompinit
 #VARS
 #for Apple Silicon
 #export DOTNET_ROOT=/opt/homebrew/Cellar/dotnet/7.0.100/libexec
-export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"
+#export DOTNET_ROOT="/usr/local/opt/dotnet/libexec"
 
 alias ibrew='arch -x86_64 /usr/local/bin/brew'
-
-export PATH="/opt/homebrew/opt/openjdk/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
 complete -o nospace -C /opt/homebrew/bin/nomad nomad
 
@@ -56,5 +54,7 @@ eval "$(direnv hook $SHELL)"
 #shows some random warnings
 #source /opt/homebrew/opt/zsh-fast-syntax-highlighting/share/zsh-fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
+export PATH="/opt/homebrew/opt/openjdk/bin:/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 # Added by Windsurf
 #export PATH="/Users/ps/.codeium/windsurf/bin:$PATH"
+export PATH="/opt/homebrew/opt/dotnet@8/bin:$PATH"
